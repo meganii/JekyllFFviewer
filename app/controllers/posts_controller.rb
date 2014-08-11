@@ -5,6 +5,15 @@ class PostsController < ApplicationController
   # GET /posts.json
   def index
     @posts = Post.all
+
+    a = []
+    @posts.each do |post|
+      data = post.metadata
+      data.keys.each do |key|
+        a << key
+      end
+    end
+    @column = a.uniq.sort
   end
 
   # GET /posts/1

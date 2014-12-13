@@ -6,6 +6,24 @@ class PostsController < ApplicationController
   def index
     @posts = Post.all
 
+    hash = []
+    
+    if params[:sort] != nil
+
+      sortkey = params[:sort] 
+
+      @posts.each do |post|
+        hash << post.metadata
+      end
+
+      hash.each {|h| puts h }
+
+      result = hash.sort {|a, b| compare(a[sortkey], b[sortkey]) }
+      hash = result
+
+    end
+
+
     a = []
     @posts.each do |post|
       data = post.metadata
@@ -14,6 +32,18 @@ class PostsController < ApplicationController
       end
     end
     @column = a.uniq.sort
+
+    @posts = hash
+  end
+
+
+  def compare(a, b)
+    return -1 unless b 
+    return 1 unless a
+
+    a = a[0] if a.instance_of? Array
+    b = b[0] if b.instance_of? Array
+    a <=> b
   end
 
   # GET /posts/1
